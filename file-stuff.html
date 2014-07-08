@@ -7,6 +7,8 @@
 	
 	<script src="jquery-1.11.1.js"></script>	
 	
+</head>	
+<body>	
 	<table class='export1' filename='export.csv'>
 		<thead>
 			<tr>
@@ -39,13 +41,79 @@
 		</tbody>		
 	</table>
 
+	<table class='export2' filename='export.csv'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>		
+				<th>Gender:</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Billy Bob Thorton</td>
+				<td>Grizzler</td>
+				<td>68</td>
+				<td>Male</td>
+			</tr>
+			<tr>
+				<td>What'sit Who'sit</td>
+				<td>President</td>
+				<td colspan="2">235</td>
+			</tr>
+			<tr>
+				<td>Farrah Fawcett</td>
+				<td>Lady With Hair</td>
+				<td>60</td>
+				<td>Female</td>
+			</tr>
+			<tr>
+				<td colspan="2">Johnny Boy Soprano</td>
+				<td>90</td>
+				<td>Male</td>								
+			</tr>
+		</tbody>		
+	</table>
+
+	<table class='span_testing' filename='export.csv'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>		
+				<th>Gender:</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="2" rowspan="2">Billy Bob Thorton</td>
+				<td>68</td>
+				<td>Male</td>
+			</tr>
+			<tr>				
+				<td>235</td>
+				<td>Male</td>
+			</tr>
+			<tr>
+				<td>Farrah Fawcett</td>
+				<td>Lady With Hair</td>
+				<td>60</td>
+				<td>Female</td>
+			</tr>
+			<tr>
+				<td colspan="2">Johnny Boy Soprano</td>
+				<td>90</td>
+				<td>Male</td>								
+			</tr>
+		</tbody>		
+	</table>
+
+
 	<div id='testing'><a href="">Testing Text.</a></div>
 
-	<a href="#" onclick="export_csv('test.csv', 'export1')">Testing Button</a>
+	<a href="#" onclick="export_csv('test.csv', 'export1', 'export2', 'span_testing')">Testing Button</a>
 	
-</head>
-	
-<body>	
 <script>
 
 	function parse_string_for_csv(input_string) {
@@ -92,35 +160,68 @@
 				$(this).find("tr").each(function() {
 	
 					var columnCount = 0;		// should check current row instead, to deal with rowspawn
-										
-					var currentRow = []
-					
+
+					var currentRow = [];
+
+					if(currentRowIndex < cellArray.length - 1) {
+						
+						currentRow = cellArray[currentRowIndex];					
+					}
+					else {
+						
+						currentRow = []
+						cellArray.push(currentRow);
+					}
+
 					$(this).find("th, td").each(function() {
 						currentRow.push(parse_string_for_csv(this.textContent));
+
 						columnCount++;
+
+						colspan = parseInt($(this).attr("colspan")) || 1;
+						rowspan = parseInt($(this).attr("rowspan")) || 1;
+						
+						if (rowspan > 1 || colspan > 1) {
+								
+							var missingRows = currentRowIndex + rowspan - cellArray.length;
+							
+							for(; missingRows > 0; missingRows--) {							
+								cellArray.push([]);
+							}
+							
+							for(var spanRowIndex = currentRowIndex; spanRowIndex < currentRowIndex + rowspan; spanRowIndex++) {
+
+								var missingColumns = colspan;
+								
+								for (var missingColumns = colspan; missingColumns > 1; missingColumns--) {															
+									cellArray[spanRowIndex].push('');
+								}							
+							}
+							columnCount += colspan;
+						}
+					
 					});
 		
 					if (columnCount > maxColumnCount) maxColumnCount = columnCount;
 					
-					cellArray.push(currentRow);			// should check to see if this row already exists or not
-					
 					currentRowIndex++;
 				});								
+				cellArray.push([]);
+				currentRowIndex++;			
 			});			
 		}
 
-		for (var currentRowIndex = 0; currentRowIndex < cellArray.length; currentRowIndex++) {
-
-			var currentRow = cellArray[currentRowIndex];
+		cellArray.forEach(function(currentRow) {
 
 			csvString += currentRow.join();
-									
-			for (var missingColumns = maxColumnCount - currentRow.length; missingColumns > 0; missingColumns - 1) {				
-				csvString += ',';
+						
+			for (var missingColumns = maxColumnCount - currentRow.length; missingColumns > 0; missingColumns--) {				
+				csvString += ',';			// fill out the rest of the row
 			}
 			
 			csvString += '\r\n';
-		}
+		});
+		
 
 		var aFileParts = [csvString];
 		
