@@ -163,7 +163,7 @@
 
 					var currentRow = [];
 
-					if(currentRowIndex < cellArray.length - 1) {
+					if(currentRowIndex < cellArray.length) {
 						
 						currentRow = cellArray[currentRowIndex];					
 					}
@@ -191,9 +191,9 @@
 							
 							for(var spanRowIndex = currentRowIndex; spanRowIndex < currentRowIndex + rowspan; spanRowIndex++) {
 
-								var missingColumns = colspan;
+								var missingColumns = spanRowIndex == currentRowIndex ? colspan - 1 : colspan;
 								
-								for (var missingColumns = colspan; missingColumns > 1; missingColumns--) {															
+								for (; missingColumns > 0; missingColumns--) {															
 									cellArray[spanRowIndex].push('');
 								}							
 							}
