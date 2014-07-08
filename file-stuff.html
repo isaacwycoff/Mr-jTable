@@ -39,39 +39,14 @@
 		</tbody>		
 	</table>
 
-	<table>
-	  <colgroup span="1" style="background-color: #ff0000;"></colgroup>
-	  <colgroup span="2" style="background-color: #00ff00;"></colgroup>
-	  <tr>
-	    <td>1</td>
-	    <td>2</td>
-	    <td>3</td>
-	  </tr>
-	  <tr>
-	    <td>4</td>
-	    <td>5</td>
-	    <td>6</td>
-	  </tr>  
-	</table>
-
 	<div id='testing'><a href="">Testing Text.</a></div>
 
-	<a href="" onclick="export_csv('test.csv', 'export1')">Testing Button</a>
+	<a href="#" onclick="export_csv('test.csv', 'export1')">Testing Button</a>
 	
 </head>
 	
 <body>	
 <script>
-
-	$( document ).ready(function() {
-		
-		
-    console.log( "ready!" );
-	});
-
-	
-
-
 
 	function parse_string_for_csv(input_string) {
 		
@@ -85,82 +60,28 @@
 		
 		if (input_string.search("[\",]") != -1) {					// enclose in quotes
 			output_string = "\"" + output_string + "\""	
-		}
-		
-		output_string = output_string + ","						// always add the trailing comma
+		}		
+		output_string = output_string;						// always add the trailing comma
 
 		console.debug("Input string: " + input_string);
 		console.debug("Output string: " + output_string);
 
-		return output_string;
-				
+		return output_string;				
 	}		
 
-
-	//	console.debug(parse_string_for_csv("\""));
-	parse_string_for_csv("\"");
-	parse_string_for_csv("Bond, James");
-	parse_string_for_csv("David \"Zeb\" Cook");
-	parse_string_for_csv('"Comedian"');
-
-
-	var a;
-
-	$(".export_table").each( function() {		
-		
-		var csvString = ''				
-		var filename = $(this).attr('filename');
-		
-		$(this).find("tr").each(function() {
-			
-			$(this).find("th, td").each(function() {
-				csvString += parse_string_for_csv(this.textContent);		// maybe put the commas in the CSV parser?								
-			});
-
-			// add together array, with commas in the middle and a new-line at the end
-
-			csvString += '\r\n';
-		});
-
-		var aFileParts = [csvString];
-		
-		// turn it into a blob in local storage:
-		var oMyBlob = new Blob(aFileParts, {type : 'text/csv'}); // the blob
-		
-		var url = URL.createObjectURL(oMyBlob);		// get the URL to the blob
-		
-		var b = $('<a>',{
-			text: 'This is blah',
-    		title: 'Blah',
-    		href: url,
-    		download: filename,
-    		//click: function() { alert("Clicked!"); }
-    		// click: function(){ BlahFunc( options.rowId );return false;}
-		})
-		
-		b.appendTo('body');
-		
-		b[0].click();
-		
-		/*
-		a = $('a');
-		a.attr("href", url);		// set our link
-		a.attr("download", filename);		// make it so the user gets a pretty filename rather than gibberish
-		//a.css("display", "none");
-		$('body').append(a);
-		a.trigger('click');
-		*/
-		//win
-				
-	});
-	
 	
 	function export_csv() {
 
 		if (arguments.length < 2) return;		// ERROR!
 		
-		var filename = arguments[0]
-		var csvString = ''						// this will store our CSV	
+		var filename = arguments[0];
+		var csvString = '';						// this will store our CSV	
+				
+		var cellArray = [];
+				
+		var currentRowIndex = 0;
+
+		var maxColumnCount = 0;
 				
 		for (var i = 1; i < arguments.length; i++) {
 
@@ -169,17 +90,36 @@
 			$("." + class_name).each( function() {		
 				
 				$(this).find("tr").each(function() {
+	
+					var columnCount = 0;		// should check current row instead, to deal with rowspawn
+										
+					var currentRow = []
 					
 					$(this).find("th, td").each(function() {
-						csvString += parse_string_for_csv(this.textContent);		// maybe put the commas in the CSV parser?								
+						currentRow.push(parse_string_for_csv(this.textContent));
+						columnCount++;
 					});
 		
-					// add together array, with commas in the middle and a new-line at the end		
-					csvString += '\r\n';
-				});
-								
-			});
+					if (columnCount > maxColumnCount) maxColumnCount = columnCount;
+					
+					cellArray.push(currentRow);			// should check to see if this row already exists or not
+					
+					currentRowIndex++;
+				});								
+			});			
+		}
+
+		for (var currentRowIndex = 0; currentRowIndex < cellArray.length; currentRowIndex++) {
+
+			var currentRow = cellArray[currentRowIndex];
+
+			csvString += currentRow.join();
+									
+			for (var missingColumns = maxColumnCount - currentRow.length; missingColumns > 0; missingColumns - 1) {				
+				csvString += ',';
+			}
 			
+			csvString += '\r\n';
 		}
 
 		var aFileParts = [csvString];
@@ -192,17 +132,16 @@
 		// creates the temporary link that will send us to our generated CSV
 		// don't use visible: False or hidden: True, or the click event won't work
 		var temp_link = $('<a>',{
-			text: '',
+			text: 'HERP',
     		title: '',
     		href: url,
-    		download: filename,			
-		})
-		
+    		download: filename,
+    		//onclick: alert('derp'),
+		})		
 		temp_link.appendTo('body');
 
-		temp_link[0].click();		// hack to mack the forced link-click work
-	}
-	
+		//temp_link[0].click();		// hack to mack the forced link-click work
+	}	
 	
 </script>
 
