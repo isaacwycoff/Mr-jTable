@@ -132,11 +132,10 @@
 		// creates the temporary link that will send us to our generated CSV
 		// don't use visible: False or hidden: True, or the click event won't work
 		var temp_link = $('<a>',{
-			text: 'HERP',
+			text: 'A',
     		title: '',
     		href: url,
-    		download: filename,
-    		//onclick: alert('derp'),
+    		download: filename
 		})		
 		temp_link.appendTo('body');
 
