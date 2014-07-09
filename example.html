@@ -8,7 +8,7 @@
 	
 </head>	
 <body>	
-	<table id='export1' filename='export.csv'>
+	<table class='export1' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -40,7 +40,7 @@
 		</tbody>		
 	</table>
 
-	<table id='export2' filename='export.csv'>
+	<table class='export1' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -75,7 +75,7 @@
 		</tbody>		
 	</table>
 
-	<table id='span_testing' filename='export.csv'>
+	<table class='span_testing' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -108,7 +108,13 @@
 		</tbody>		
 	</table>
 
-	<a href="#" onclick="table_export_csv(this, 'test.csv', ['export1', 'export2', 'span_testing'])">Export to CSV</a>
+	<ul>
+		<li><a href="#" onclick="table_export_csv(this, 'single_table.csv', ['span_testing'])">Export a single table</a></li>		
+		<li><a href="#" onclick="table_export_csv(this, 'single_class.csv', ['export1'])">Export a single class of tables</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'test.csv', ['export1', 'span_testing'])">Export multiple classes of tables</a></li>
+	</ul>
+
+
 	
 </body>
 </html>
