@@ -9,7 +9,7 @@
 	
 </head>	
 <body>	
-	<table class='export1' filename='export.csv'>
+	<table id='export1' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -41,7 +41,7 @@
 		</tbody>		
 	</table>
 
-	<table class='export2' filename='export.csv'>
+	<table id='export2' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -76,7 +76,7 @@
 		</tbody>		
 	</table>
 
-	<table class='span_testing' filename='export.csv'>
+	<table id='span_testing' filename='export.csv'>
 		<thead>
 			<tr>
 				<th>Name:</th>
@@ -112,50 +112,44 @@
 
 	<div id='testing'><a href="">Testing Text.</a></div>
 
-	<a href="#" onclick="export_csv('test.csv', 'export1', 'export2', 'span_testing')">Testing Button</a>
+	<a href="#" onclick="export_csv(this, 'test.csv', ['export1', 'export2', 'span_testing'])">Testing Button</a>
 	
 <script>
-
-	function parse_string_for_csv(input_string) {
-		
-		// if there are double-quotes or commas in the string
-		// we need to escape the quotes and surround the whole thing with quotes
-				
-		// there might be a slicker way to do this using RegEx, but we'll
-		// save that for later, if this proves to be too slow:				
-				
-		output_string = input_string.replace(/"/g, "\"\"");			// escape quotes
-		
-		if (input_string.search("[\",]") != -1) {					// enclose in quotes
-			output_string = "\"" + output_string + "\""	
-		}		
-		output_string = output_string;						// always add the trailing comma
-
-		console.debug("Input string: " + input_string);
-		console.debug("Output string: " + output_string);
-
-		return output_string;				
-	}		
-
 	
-	function export_csv() {
+	function export_csv(a, filename, tables) {
 
-		if (arguments.length < 2) return;		// ERROR!
-		
-		var filename = arguments[0];
+		function parse_string_for_csv(input_string) {
+			
+			// if there are double-quotes or commas in the string
+			// we need to escape the quotes and surround the whole thing with quotes
+					
+			// there might be a slicker way to do this using RegEx, but we'll
+			// save that for later, if this proves to be too slow:				
+					
+			output_string = input_string.replace(/"/g, "\"\"");			// escape quotes
+			
+			if (input_string.search("[\",]") != -1) {					// enclose in quotes
+				output_string = "\"" + output_string + "\""	
+			}		
+			output_string = output_string;						// always add the trailing comma
+	
+			console.debug("Input string: " + input_string);
+			console.debug("Output string: " + output_string);
+	
+			return output_string;				
+		}		
+
 		var csvString = '';						// this will store our CSV	
 				
 		var cellArray = [];
 				
 		var currentRowIndex = 0;
-
 		var maxColumnCount = 0;
-				
-		for (var i = 1; i < arguments.length; i++) {
+		
+		tables.forEach(function(table_name) {
 
-			class_name = arguments[i]
-			
-			$("." + class_name).each( function() {		
+			//$("#" + table_name).each( function() {		
+			$("#" + table_name).each(function() {		
 				
 				$(this).find("tr").each(function() {
 	
@@ -176,10 +170,10 @@
 					$(this).find("th, td").each(function() {
 						currentRow.push(parse_string_for_csv(this.textContent));
 
-						columnCount++;
-
 						colspan = parseInt($(this).attr("colspan")) || 1;
 						rowspan = parseInt($(this).attr("rowspan")) || 1;
+						
+						columnCount += colspan;
 						
 						if (rowspan > 1 || colspan > 1) {
 								
@@ -197,9 +191,7 @@
 									cellArray[spanRowIndex].push('');
 								}							
 							}
-							columnCount += colspan;
-						}
-					
+						}					
 					});
 		
 					if (columnCount > maxColumnCount) maxColumnCount = columnCount;
@@ -209,19 +201,22 @@
 				cellArray.push([]);
 				currentRowIndex++;			
 			});			
-		}
+		});
+
+		cellArray.pop();		// get rid of the last row, which is blank because of spacing between sub-tables.
 
 		cellArray.forEach(function(currentRow) {
 
 			csvString += currentRow.join();
-						
-			for (var missingColumns = maxColumnCount - currentRow.length; missingColumns > 0; missingColumns--) {				
+
+			// some gross stuff to make sure that there are the same number of commas on each row
+			// we need to add 1 comma less on empty rows, for reasons that are probably expressible mathemtically, but really annoying to do so.
+			for (var missingColumns = maxColumnCount - (currentRow.length || 1); missingColumns > 0; missingColumns--) {				
 				csvString += ',';			// fill out the rest of the row
 			}
 			
 			csvString += '\r\n';
-		});
-		
+		});		
 
 		var aFileParts = [csvString];
 		
@@ -232,19 +227,15 @@
 		
 		// creates the temporary link that will send us to our generated CSV
 		// don't use visible: False or hidden: True, or the click event won't work
-		var temp_link = $('<a>',{
+		$(a).attr({
 			text: 'A',
     		title: '',
     		href: url,
-    		download: filename
-		})		
-		temp_link.appendTo('body');
-
-		//temp_link[0].click();		// hack to mack the forced link-click work
-	}	
-	
+    		download: filename,
+    		onclick: null
+		})
+	}
+		
 </script>
-
-
 </body>
 </html>
