@@ -9,7 +9,8 @@ function table_export_csv(a, filename, tableClasses) {
 		// if there are double-quotes or commas in the string
 		// we need to escape the quotes and surround the whole thing with quotes				
 		output_string = input_string.replace(/"/g, "\"\"");			// escape quotes
-		
+		output_string = output_string.replace(/(^\s+)|(\r?\n|\r)|(\s+)/g, "");		// remove newlines and all whitespace at beginning and end
+				
 		if (input_string.search("[\",]") != -1) {					// enclose in quotes
 			output_string = "\"" + output_string + "\""	
 		}		
@@ -46,27 +47,22 @@ function table_export_csv(a, filename, tableClasses) {
 				}
 			
 				for(var j = 0; j < cellElements.length; j++) {
-					element = cellElements[j];
-	
-					currentRow.push(parse_string_for_csv(element.innerHTML));
-					
+					element = cellElements[j];	
+
+					currentRow.push(parse_string_for_csv(element.textContent));	
+									
 					colspan = parseInt(element.getAttribute('colspan')) || 1;
 					rowspan = parseInt(element.getAttribute('rowspan')) || 1;
 					
 					columnCount += colspan;
 					
-					if (rowspan > 1 || colspan > 1) {
-							
-						var missingRows = currentRowIndex + rowspan - cellArray.length;
-						
+					if (rowspan > 1 || colspan > 1) {							
+						var missingRows = currentRowIndex + rowspan - cellArray.length;						
 						for(; missingRows > 0; missingRows--) {							
 							cellArray.push([]);
-						}
-						
-						for(var spanRowIndex = currentRowIndex; spanRowIndex < currentRowIndex + rowspan; spanRowIndex++) {
-	
-							var missingColumns = spanRowIndex == currentRowIndex ? colspan - 1 : colspan;
-							
+						}						
+						for(var spanRowIndex = currentRowIndex; spanRowIndex < currentRowIndex + rowspan; spanRowIndex++) {	
+							var missingColumns = spanRowIndex == currentRowIndex ? colspan - 1 : colspan;							
 							for (; missingColumns > 0; missingColumns--) {															
 								cellArray[spanRowIndex].push('');
 							}							
@@ -77,7 +73,7 @@ function table_export_csv(a, filename, tableClasses) {
 				currentRowIndex++;			
 			}							
 			cellArray.push([]);		// add an empty line between sub-tables
-			currentRowIndex++;			
+			currentRowIndex++;		
 		}
 	});
 	cellArray.pop();		// get rid of the last row, which is blank because of spacing between sub-tables.
