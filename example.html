@@ -1,0 +1,114 @@
+<html>
+<head>
+	<title>
+		Example
+	</title>
+	
+	<script src="table-export.js"></script>
+	
+</head>	
+<body>	
+	<table id='export1' filename='export.csv'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>			
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Bond, James</td>
+				<td>Alcoholic</td>
+				<td>37</td>
+			</tr>
+			<tr>
+				<td>David "Zeb" Cook</td>
+				<td>Dungeon Master</td>
+				<td>97</td>
+			</tr>
+			<tr>
+				<td>Mr. Potato Head, Esquire</td>
+				<td>"Comedian"</td>
+				<td>3</td>
+			</tr>
+			<tr>
+				<td>John Carmack</td>
+				<td>Nerd</td>
+				<td>45</td>
+			</tr>
+		</tbody>		
+	</table>
+
+	<table id='export2' filename='export.csv'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>		
+				<th>Gender:</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Billy Bob Thorton</td>
+				<td>Grizzler</td>
+				<td>68</td>
+				<td>Male</td>
+			</tr>
+			<tr>
+				<td>What'sit Who'sit</td>
+				<td>President</td>
+				<td colspan="2">235</td>
+			</tr>
+			<tr>
+				<td>Farrah Fawcett</td>
+				<td>Lady With Hair</td>
+				<td>60</td>
+				<td>Female</td>
+			</tr>
+			<tr>
+				<td colspan="2">Johnny Boy Soprano</td>
+				<td>90</td>
+				<td>Male</td>								
+			</tr>
+		</tbody>		
+	</table>
+
+	<table id='span_testing' filename='export.csv'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>		
+				<th>Gender:</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td colspan="2" rowspan="2">Billy Bob Thorton</td>
+				<td>68</td>
+				<td>Male</td>
+			</tr>
+			<tr>				
+				<td>235</td>
+				<td>Male</td>
+			</tr>
+			<tr>
+				<td>Farrah Fawcett</td>
+				<td>Lady With Hair</td>
+				<td>60</td>
+				<td>Female</td>
+			</tr>
+			<tr>
+				<td colspan="2">Johnny Boy Soprano</td>
+				<td>90</td>
+				<td>Male</td>								
+			</tr>
+		</tbody>		
+	</table>
+
+	<a href="#" onclick="table_export_csv(this, 'test.csv', ['export1', 'export2', 'span_testing'])">Export to CSV</a>
+	
+</body>
+</html>
