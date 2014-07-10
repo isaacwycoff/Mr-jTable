@@ -66,9 +66,9 @@ function table_export_csv(a, filename, selector) {
 					cellArray[rowIndex][columnIndex] = ''					
 				}
 				else {					
-	            	cellArray[rowIndex][columnIndex] = parse_string_for_csv(element.textContent);					
+					cellArray[rowIndex][columnIndex] = parse_string_for_csv(element.textContent);					
 				}
-                ++columnIndex;				
+				++columnIndex;				
 			}
 			++rowIndex;
 		}
