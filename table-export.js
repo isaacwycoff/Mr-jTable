@@ -32,7 +32,7 @@ function table_export_csv(a, filename, selector) {
 		rows += table.rows.length;
         for(var i = 0; i < table.rows.length; ++i){
             columns = Math.max(table.rows[i].cells.length, columns);
-        }		
+        }
 	}
     rows += tables.length - 1;    // we add a blank row between each table
     
@@ -59,8 +59,15 @@ function table_export_csv(a, filename, selector) {
                         cellArray[r][c] = USED_UP;
                     }
                 }
-                // actually write the value to the cellArray
-                cellArray[rowIndex][columnIndex] = parse_string_for_csv(element.textContent);
+
+				// add the actual cell, but only if it's visible				
+				var style = getComputedStyle(element, null);
+				if(style.visibility == 'hidden' || style.display == 'none') {
+					cellArray[rowIndex][columnIndex] = ''					
+				}
+				else {					
+	            	cellArray[rowIndex][columnIndex] = parse_string_for_csv(element.textContent);					
+				}
                 ++columnIndex;				
 			}
 			++rowIndex;

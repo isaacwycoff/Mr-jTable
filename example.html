@@ -108,13 +108,61 @@
 		</tbody>		
 	</table>
 
+	<table class='super-complicated' border='1px'>
+		<tbody>
+			<tr>
+				<td> NARROW </td>
+				<td colspan='2'>WIDE</td>								
+			</tr>
+			<tr>
+				<td colspan='3'>SUPER-WIDE</td>								
+			</tr>
+			<tr>
+				<td colspan='2'>WIDE</td>								
+				<td> NARROW </td>
+			</tr>
+		</tbody>
+	</table>
 	
+	<table class='hidden-values' border='1px'>
+		<thead>
+			<tr>
+				<th>Name:</th>
+				<th>Occupation:</th>
+				<th>Age:</th>			
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Bond, James</td>
+				<td>Alcoholic</td>
+				<td>37</td>
+			</tr>
+			<tr>
+				<td>David "Zeb" Cook</td>
+				<td>Dungeon Master</td>
+				<td style='display:none;'>DISPLAY NONE</td>
+			</tr>
+			<tr style='visibility:hidden;'>
+				<td>THIS </td>
+				<td>SHOULDN'T</td>
+				<td>BE VISIBLE</td>
+			</tr>
+			<tr>
+				<td>John Carmack</td>
+				<td>Nerd</td>
+				<td>45</td>
+			</tr>
+		</tbody>
+	</table>	
 
 	<ul>
 		<li><a href="#" onclick="table_export_csv(this, 'single_table.csv', '.span_testing')">Export a single table</a></li>		
 		<li><a href="#" onclick="table_export_csv(this, 'single_class.csv', '.export1')">Export a single class of tables</a></li>
 		<li><a href="#" onclick="table_export_csv(this, 'test.csv', '.export1, .span_testing')">Export multiple classes of tables</a></li>
-		<li><a href="#" onclick="table_export_csv(this, 'span_testing.csv', '.span_testing')">Export table with complicated spans</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'super_complicated.csv', '.super-complicated')">Export table with complicated spans</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'hidden-values.csv', '.hidden-values')">Export table with hidden elements</a></li>
+
 	</ul>
 
 
