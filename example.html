@@ -108,10 +108,13 @@
 		</tbody>		
 	</table>
 
+	
+
 	<ul>
-		<li><a href="#" onclick="table_export_csv(this, 'single_table.csv', ['span_testing'])">Export a single table</a></li>		
-		<li><a href="#" onclick="table_export_csv(this, 'single_class.csv', ['export1'])">Export a single class of tables</a></li>
-		<li><a href="#" onclick="table_export_csv(this, 'test.csv', ['export1', 'span_testing'])">Export multiple classes of tables</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'single_table.csv', '.span_testing')">Export a single table</a></li>		
+		<li><a href="#" onclick="table_export_csv(this, 'single_class.csv', '.export1')">Export a single class of tables</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'test.csv', '.export1, .span_testing')">Export multiple classes of tables</a></li>
+		<li><a href="#" onclick="table_export_csv(this, 'span_testing.csv', '.span_testing')">Export table with complicated spans</a></li>
 	</ul>
 
 
