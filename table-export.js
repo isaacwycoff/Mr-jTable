@@ -51,9 +51,7 @@ function table_export_csv(a, filename, selector) {
 		for (var i = 0; i < table.rows.length; ++i) {
 			for (var j = 0, columnIndex = 0; j < table.rows[i].cells.length; ++j) {
 				var element = table.rows[i].cells[j];
-
-				while (cellArray[rowIndex][columnIndex] === USED_UP) {++columnIndex;
-				}
+				while (cellArray[rowIndex][columnIndex] === USED_UP) {++columnIndex;}
 
 				var colspan = parseInt(element.getAttribute('colspan'), 10) || 1;
 				var rowspan = parseInt(element.getAttribute('rowspan'), 10) || 1;
@@ -83,12 +81,8 @@ function table_export_csv(a, filename, selector) {
 	}
 	csvString = csvRows.join("\r\n");
 
-	var blob = new Blob([csvString], {
-		type : 'text/csv'
-	});
-	// now turn it into a blob in local storage
-	var url = URL.createObjectURL(blob);
-	// get the URL to the blob
+	var blob = new Blob([csvString], { type : 'text/csv' }); 	// now turn it into a blob in local storage
+	var url = URL.createObjectURL(blob); 	// get the URL to the blob
 
 	// points the 'a' element at our generated file
 	// this works because this function is called before the link is evaluated
